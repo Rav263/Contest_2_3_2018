@@ -3,18 +3,33 @@
 
 
 char some_func(char *a, char *b, int n, char now){
+  char ret = now;
   for(int i = 0; i < n; i++){
-    if(a[i] == now)return b[i];
+    if(a[i] == now)ret = b[i];
   }
-  return now;
+  return ret;
+}
+
+
+void read_string(char *str){
+  for(int i = 0;;i++){
+    char now;
+    scanf("%c", &now);
+    if(now == '\n'){
+      str[i] = '\0';
+      break;
+    }
+    str[i] = now;
+  }
 }
 
 
 int main(void){
-  char a[4096];
-  char b[4096];
+  char a[10000];
+  char b[10000];
  
-  scanf("%s %s", a, b);
+  read_string(a);
+  read_string(b);
 
   if(strlen(a) != strlen(b))return 0;
 
@@ -24,10 +39,9 @@ int main(void){
   scanf("%d", &n);
 
   for(int i = 0; i < n; i++){
-    char c[4096];
+    char c[10000];
 
-    scanf("%s", c);
-
+    read_string(c);
     int now_len = strlen(c);
 
     for(int j = 0; j < now_len; j++){
@@ -37,5 +51,5 @@ int main(void){
     printf("\n");
 
   }
-
+  return 0;
 }
