@@ -34,7 +34,8 @@ NOTREC: ;основная функция вычисления
   MOV EBX, DWORD[EBP + 8]  ;глубина вычислений n
   MOV ECX, DWORD[EBP + 12] ;основание системы счисления k
   MOV EAX, DWORD[EBP + 16] ;число a
-
+  
+  MOV EDX, 0
   MOV EDI, 2011
   DIV EDI
   MOV EAX, EDX
@@ -47,7 +48,7 @@ NOTREC: ;основная функция вычисления
   PUSH ECX
   PUSH DWORD[arr]
   PUSH DWORD[arr]
-  CALL 
+  CALL OPER
   POP DWORD[arr]
   POP DWORD[arr]
   POP ECX
@@ -75,12 +76,23 @@ NOTREC: ;основная функция вычисления
     POP EBX
 
     MOV DWORD[arr + EDX*4], EAX
+    INC EDX
     jmp .top
   .end:
 
   DEC EBX
 
   MOV EAX, DWORD[arr + EBX*4]
+  DEC EDX
+
+  .top2:
+    PRINT_DEC 4, [arr + EDX*4]
+    PRINT_STRING " "
+    DEC EDX
+    cmp EDX, -1
+  jnz .top2
+  NEWLINE
+
 
   MOV ESP, EBP
   POP EBP
@@ -96,25 +108,25 @@ OPER: ;оператор # из условия
   MOV EDI, DWORD[EBP + 12] ;второе чилсло
   MOV ECX, DWORD[EBP + 16] ;основание системы счисления
 
+
   PUSH ECX
   PUSH EDI
-  CALL CONUT
+  CALL COUNT
   POP EDI
   POP ECX
 
   MOV EBX, EAX
 
   PUSH ESI
-  PUSH EBX
   PUSH ECX
+  PUSH EBX
   CALL STEP
-  POP ECX
   POP EBX
+  POP ECX
   POP ESI
 
-
   MOV EDX, 0
-  IMUL EAX, ESI
+  MUL ESI
 
   MOV EDX, 0
   MOV ESI, 2011
@@ -166,16 +178,19 @@ STEP: ;Степень
   MOV ECX, DWORD[EBP + 8]  ;n - степень
   MOV EBX, DWORD[EBP + 12] ;k - основание
 
-
   MOV EAX, 1
 
   .top:
+    cmp ECX, 0
+    jz .end
     IMUL EAX, EBX
     MOV EDX, 0
     MOV ESI, 2011
     DIV ESI
     MOV EAX, EDX ;остаток от деления на 2011
-  loop .top
+    DEC ECX
+    jmp .top
+  .end:
 
   MOV ESP, EBP
   POP EBP
