@@ -36,7 +36,9 @@ int main(void){
   int len = strlen(a);
 
   int n;
+  char now;
   scanf("%d", &n);
+  scanf("%c", &now);
 
   for(int i = 0; i < n; i++){
     char c[10000];
@@ -44,11 +46,11 @@ int main(void){
     read_string(c);
     int now_len = strlen(c);
 
+
     for(int j = 0; j < now_len; j++){
-      char now = some_func(a, b, len, c[j]);
-      printf("%c", now);
+      c[j] = some_func(a, b, len, c[j]);
     }
-    printf("\n");
+    printf("%s\n", c);
 
   }
   return 0;
