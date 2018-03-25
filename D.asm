@@ -2,6 +2,7 @@
 
 section .bss 
   arr resd 4000001
+  step resd 13
 
 section .text
 global CMAIN
@@ -9,6 +10,22 @@ CMAIN:
   GET_DEC 4, EBX ;основание системы счисления k
   GET_DEC 4, ECX ;глубина вычислений n
   GET_DEC 4, EDX ;число a
+
+  MOV EAX, 1
+  MOV DWORD[step], EBX
+  MOV ESI, 1
+
+  .top:
+    cmp ESI, 13
+    jz .end
+    IMUL EAX, EBX
+    MOV DWORD[step + ESI*4], EAX 
+    INC ESI
+    jmp .top
+  .end:
+
+  MOV EAX, 0
+  MOV ESI, 0
 
   PUSH EDX
   PUSH EBX
@@ -85,15 +102,6 @@ NOTREC: ;основная функция вычисления
   MOV EAX, DWORD[arr + EBX*4]
   DEC EDX
 
-  .top2:
-    PRINT_DEC 4, [arr + EDX*4]
-    PRINT_STRING " "
-    DEC EDX
-    cmp EDX, -1
-  jnz .top2
-  NEWLINE
-
-
   MOV ESP, EBP
   POP EBP
 RET
@@ -117,23 +125,14 @@ OPER: ;оператор # из условия
 
   MOV EBX, EAX
 
-  PUSH ESI
-  PUSH ECX
-  PUSH EBX
-  CALL STEP
-  POP EBX
-  POP ECX
-  POP ESI
+  MOV EAX, DWORD[step + EBX*4]
 
   MOV EDX, 0
-  MUL ESI
+  IMUL EAX, ESI
 
   MOV EDX, 0
   MOV ESI, 2011
-  DIV ESI
-  MOV EAX, EDX
-
-  MOV EDX, 0
+  
   ADD EAX, EDI
   DIV ESI
 
@@ -169,29 +168,3 @@ COUNT: ;Количество значимых цифр в данной сист�
   POP EBP
 RET
 
-
-global STEP
-STEP: ;Степень
-  PUSH EBP
-  MOV EBP, ESP
-
-  MOV ECX, DWORD[EBP + 8]  ;n - степень
-  MOV EBX, DWORD[EBP + 12] ;k - основание
-
-  MOV EAX, 1
-
-  .top:
-    cmp ECX, 0
-    jz .end
-    IMUL EAX, EBX
-    MOV EDX, 0
-    MOV ESI, 2011
-    DIV ESI
-    MOV EAX, EDX ;остаток от деления на 2011
-    DEC ECX
-    jmp .top
-  .end:
-
-  MOV ESP, EBP
-  POP EBP
-RET
