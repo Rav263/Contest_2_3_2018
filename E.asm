@@ -8,6 +8,9 @@ section .data
 section .text
 global CMAIN
 CMAIN:
+  PUSH EBP
+  MOV EBP, ESP
+  
   GET_DEC 4, EAX
   GET_DEC 4, ESI
   GET_DEC 4, EDI
@@ -75,7 +78,11 @@ CMAIN:
  NEWLINE
 
  MOV EAX, 0
-ret
+
+
+ MOV ESP, EBP
+ POP EBP
+RET
 
 global PRNT
 PRNT:

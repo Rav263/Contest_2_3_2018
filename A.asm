@@ -3,11 +3,17 @@
 section .text
 global CMAIN
 CMAIN:
+  PUSH EBP
+  MOV EBP, ESP
+
   CALL REC
 
   NEWLINE
 
   MOV EAX, 0
+
+  MOV ESP, EBP
+  POP EBP
 RET
  
 global REC

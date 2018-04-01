@@ -8,6 +8,9 @@ section .bss
 section .text
 global CMAIN
 CMAIN:
+  PUSH EBP
+  MOV EBP, ESP
+
   GET_DEC 4, EBX
   
   MOV ECX, 1
@@ -40,6 +43,9 @@ CMAIN:
   NEWLINE
 
   MOV EAX, 0
+
+  MOV ESP, EBP
+  POP EBP
 RET
 
 

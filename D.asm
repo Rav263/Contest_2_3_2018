@@ -7,6 +7,10 @@ section .bss
 section .text
 global CMAIN
 CMAIN:
+  PUSH EBP
+  MOV EBP, ESP
+
+
   GET_DEC 4, EBX ;основание системы счисления k
   GET_DEC 4, ECX ;глубина вычислений n
   GET_DEC 4, EDX ;число a
@@ -40,6 +44,9 @@ CMAIN:
 
 
   MOV EAX, 0
+
+  MOV ESP, EBP
+  POP EBP
 RET
 
 
